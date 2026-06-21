@@ -46,6 +46,7 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api/v1/test', require('./routes/test.routes'));
+app.use('/api/v1/staff', require('./routes/v1/staff.routes'));
 
 // Global Error Handler
 app.use(errorHandler);

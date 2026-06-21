@@ -2,14 +2,22 @@ export function Badge({ children, tone = 'slate' }) {
   return <span className={`badge badge-${tone}`}>{children}</span>
 }
 
-export function Spinner({ label = 'Loading…' }) {
+export function Spinner({ label, size = 'md', className = '' }) {
+  const sizeClasses = {
+    sm: 'h-4 w-4',
+    md: 'h-6 w-6',
+    lg: 'h-8 w-8',
+  }
+
+  const isSmall = size === 'sm'
+
   return (
-    <div className="flex items-center justify-center gap-2 py-16 text-slate-400 text-sm">
-      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+    <div className={`flex items-center justify-center gap-2 text-slate-400 ${!isSmall && !className ? 'py-16' : ''} ${className}`}>
+      <svg className={`animate-spin ${sizeClasses[size] || sizeClasses.md}`} viewBox="0 0 24 24" fill="none">
         <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
         <path d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
       </svg>
-      {label}
+      {label && <span className="text-sm">{label}</span>}
     </div>
   )
 }

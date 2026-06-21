@@ -29,4 +29,14 @@ const heavyApiLimiter = rateLimit({
 module.exports = {
     globalLimiter,
     heavyApiLimiter,
+    staffReadLimiter: rateLimit({
+        windowMs: 60 * 1000,
+        max: 200,
+        message: { success: false, message: 'Too many read requests, please try again after a minute' },
+    }),
+    staffWriteLimiter: rateLimit({
+        windowMs: 60 * 1000,
+        max: 60,
+        message: { success: false, message: 'Too many write requests, please try again after a minute' },
+    }),
 };

@@ -23,9 +23,7 @@ import Recipes from '../pages/inventory/Recipes'
 import Suppliers from '../pages/inventory/Suppliers'
 import ReorderSuggestions from '../pages/inventory/ReorderSuggestions'
 
-import StaffDirectory from '../pages/staff/StaffDirectory'
-import Shifts from '../pages/staff/Shifts'
-import Attendance from '../pages/staff/Attendance'
+import StaffManagement from '../pages/staff/StaffManagement'
 
 import CustomersDirectory from '../pages/customers/CustomersDirectory'
 import Loyalty from '../pages/customers/Loyalty'
@@ -77,9 +75,10 @@ export default function AppRoutes() {
         <Route path="/inventory/suppliers" element={<Suppliers />} />
         <Route path="/inventory/reorder" element={<ReorderSuggestions />} />
 
-        <Route path="/staff/directory" element={<StaffDirectory />} />
-        <Route path="/staff/shifts" element={<Shifts />} />
-        <Route path="/staff/attendance" element={<Attendance />} />
+        <Route path="/staff/management" element={<StaffManagement />} />
+        <Route path="/staff/directory" element={<Navigate to="/staff/management" replace />} />
+        <Route path="/staff/shifts" element={<Navigate to="/staff/management" replace />} />
+        <Route path="/staff/attendance" element={<Navigate to="/staff/management" replace />} />
 
         <Route path="/customers/directory" element={<CustomersDirectory />} />
         <Route path="/customers/loyalty" element={<Loyalty />} />
