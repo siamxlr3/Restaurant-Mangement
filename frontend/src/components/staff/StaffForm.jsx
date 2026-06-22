@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { FiUpload, FiX, FiCheck } from 'react-icons/fi';
+import { FiX, FiCheck } from 'react-icons/fi';
 import { Spinner } from '../ui/Common';
 import { useCreateStaffMutation, useUpdateStaffMutation } from '../../store/api/staffApi';
 import { toast } from 'react-hot-toast';
@@ -16,8 +16,6 @@ const staffSchema = z.object({
 });
 
 const StaffForm = ({ staff, onSuccess, onCancel }) => {
-    const [image, setImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(staff?.image_url || null);
     const isEdit = !!staff;
 
     const [createStaff, { isLoading: isCreating }] = useCreateStaffMutation();
@@ -38,31 +36,13 @@ const StaffForm = ({ staff, onSuccess, onCancel }) => {
         },
     });
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            if (file.size > 2 * 1024 * 1024) {
-                toast.error('File size must be less than 2MB');
-                return;
-            }
-            setImage(file);
-            const reader = new FileReader();
-            reader.onloadend = () => setImagePreview(reader.result);
-            reader.readAsDataURL(file);
-        }
-    };
-
     const onSubmit = async (data) => {
         try {
-            const formData = new FormData();
-            Object.keys(data).forEach(key => formData.append(key, data[key]));
-            if (image) formData.append('image', image);
-
             if (isEdit) {
-                await updateStaff({ id: staff.id, ...data, image }).unwrap();
+                await updateStaff({ id: staff.id, ...data }).unwrap();
                 toast.success('Staff updated successfully');
             } else {
-                await createStaff(formData).unwrap();
+                await createStaff(data).unwrap();
                 toast.success('Staff created successfully');
             }
             onSuccess();
@@ -75,28 +55,6 @@ const StaffForm = ({ staff, onSuccess, onCancel }) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="flex flex-col items-center gap-4 mb-6">
-                <div className="relative w-24 h-24 rounded-full bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center overflow-hidden group">
-                    {imagePreview ? (
-                        <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                    ) : (
-                        <FiUpload className="text-slate-400 text-2xl" />
-                    )}
-                    <input
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp"
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                        onChange={handleImageChange}
-                    />
-                    <div className="absolute inset-0 bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span className="text-xs font-medium">Change</span>
-                    </div>
-                </div>
-                <p className="text-xs text-slate-400 text-center">
-                    JPG, PNG or WebP. Max 2MB. <br />
-                    Processed to 800x800px WebP.
-                </p>
-            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
