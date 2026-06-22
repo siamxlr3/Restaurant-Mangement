@@ -48,6 +48,10 @@ app.get('/health', (req, res) => {
 app.use('/api/v1/test', require('./routes/test.routes'));
 app.use('/api/v1/staff', require('./routes/v1/staff.routes'));
 app.use('/api/v1/settings', require('./routes/v1/setting.routes'));
+app.use('/api/v1/categories', require('./routes/v1/category.routes'));
+app.use('/api/v1/items', require('./routes/v1/item.routes'));
+app.use('/api/v1/variants', require('./routes/v1/variant.routes'));
+app.use('/api/v1/modifiers', require('./routes/v1/modifier.routes'));
 
 // Global Error Handler
 app.use(errorHandler);

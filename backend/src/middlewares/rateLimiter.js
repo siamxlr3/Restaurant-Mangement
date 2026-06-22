@@ -1,52 +1,38 @@
 const rateLimit = require('express-rate-limit');
 
 /**
- * Global rate limiter configuration
+ * Standard API Rate Limiters
  */
-const globalLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100,
+
+// Rate limiter for read endpoints (GET)
+const readLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 200, // Limit each IP to 200 requests per minute
     standardHeaders: true,
     legacyHeaders: false,
     message: {
         success: false,
-        message: 'Too many requests from this IP, please try again after 15 minutes',
+        message: 'Too many requests on read endpoint, please try again after a minute',
     },
 });
 
-/**
- * Higher limit for "heavy" APIs if needed
- */
-const heavyApiLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour
-    max: 5,
+// Rate limiter for write endpoints (POST, PUT, PATCH, DELETE)
+const writeLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 60, // Limit each IP to 60 requests per minute
+    standardHeaders: true,
+    legacyHeaders: false,
     message: {
         success: false,
-        message: 'Too many heavy requests, please try again after an hour',
+        message: 'Too many requests on write endpoint, please try again after a minute',
     },
 });
 
 module.exports = {
-    globalLimiter,
-    heavyApiLimiter,
-    staffReadLimiter: rateLimit({
-        windowMs: 60 * 1000,
-        max: 200,
-        message: { success: false, message: 'Too many read requests, please try again after a minute' },
-    }),
-    staffWriteLimiter: rateLimit({
-        windowMs: 60 * 1000,
-        max: 60,
-        message: { success: false, message: 'Too many write requests, please try again after a minute' },
-    }),
-    settingReadLimiter: rateLimit({
-        windowMs: 60 * 1000,
-        max: 200,
-        message: { success: false, message: 'Too many read requests, please try again after a minute' },
-    }),
-    settingWriteLimiter: rateLimit({
-        windowMs: 60 * 1000,
-        max: 60,
-        message: { success: false, message: 'Too many write requests, please try again after a minute' },
-    }),
+    readLimiter,
+    writeLimiter,
+    staffReadLimiter: readLimiter,
+    staffWriteLimiter: writeLimiter,
+    settingReadLimiter: readLimiter,
+    settingWriteLimiter: writeLimiter,
 };

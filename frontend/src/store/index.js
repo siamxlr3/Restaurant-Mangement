@@ -8,6 +8,10 @@ import { customersApi } from './api/customersApi'
 import { billingApi } from './api/billingApi'
 import { operationsApi } from './api/operationsApi'
 import { settingsApi } from './api/settingsApi'
+import { categoriesApi } from './api/categoriesApi'
+import { itemsApi } from './api/itemsApi'
+import { variantsApi } from './api/variantsApi'
+import { modifiersApi } from './api/modifiersApi'
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +24,10 @@ export const store = configureStore({
     [billingApi.reducerPath]: billingApi.reducer,
     [operationsApi.reducerPath]: operationsApi.reducer,
     [settingsApi.reducerPath]: settingsApi.reducer,
+    [categoriesApi.reducerPath]: categoriesApi.reducer,
+    [itemsApi.reducerPath]: itemsApi.reducer,
+    [variantsApi.reducerPath]: variantsApi.reducer,
+    [modifiersApi.reducerPath]: modifiersApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -30,6 +38,10 @@ export const store = configureStore({
       customersApi.middleware,
       billingApi.middleware,
       operationsApi.middleware,
-      settingsApi.middleware
+      settingsApi.middleware,
+      categoriesApi.middleware,
+      itemsApi.middleware,
+      variantsApi.middleware,
+      modifiersApi.middleware
     ),
 })
