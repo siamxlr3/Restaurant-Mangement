@@ -35,4 +35,6 @@ module.exports = {
     staffWriteLimiter: writeLimiter,
     settingReadLimiter: readLimiter,
     settingWriteLimiter: writeLimiter,
+    tableReadLimiter: readLimiter,
+    tableWriteLimiter: writeLimiter,
 };

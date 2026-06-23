@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, Edit2, Trash2, Calendar, X, ChevronRight, ChevronLeft } from 'lucide-react';
+import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiCalendar, FiX, FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
@@ -27,6 +27,7 @@ export default function Modifiers() {
     page: 1, 
     per_page: 20, 
     search: '', 
+    status: 'all',
     from_date: '', 
     to_date: '' 
   });
@@ -108,7 +109,7 @@ export default function Modifiers() {
   const currentData = activeTab === 'variants' ? variantsData : modifiersData;
 
   const resetFilters = () => {
-    setFilters({ page: 1, per_page: 20, search: '', from_date: '', to_date: '' });
+    setFilters({ page: 1, per_page: 20, search: '', status: 'all', from_date: '', to_date: '' });
     setDebouncedSearch('');
   };
 
@@ -125,7 +126,7 @@ export default function Modifiers() {
             }} 
             className="btn-accent flex items-center gap-2"
           >
-            <Plus size={18} />
+            <FiPlus size={18} />
             New {activeTab === 'variants' ? 'Variant' : 'Modifier'}
           </button>
         }
@@ -151,55 +152,55 @@ export default function Modifiers() {
         </button>
       </div>
 
-      {/* Filters */}
-      <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-wrap items-center gap-4">
-        <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input
-            type="text"
-            placeholder={`Search ${activeTab}...`}
-            className="input-base pl-10"
-            value={debouncedSearch}
-            onChange={(e) => setDebouncedSearch(e.target.value)}
-          />
+      <div className="flex flex-wrap items-center justify-between gap-4 py-2">
+        <div className="flex items-center gap-3 flex-1 min-w-[300px]">
+          <div className="relative flex-1">
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <input
+              type="text"
+              placeholder={`Search ${activeTab}...`}
+              className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all"
+              value={debouncedSearch}
+              onChange={(e) => setDebouncedSearch(e.target.value)}
+            />
+          </div>
+          <select
+            className="px-4 py-2 border border-slate-200 rounded-lg focus:outline-none bg-white text-sm"
+            value={filters.status}
+            onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value, page: 1 }))}
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Calendar size={18} className="text-slate-400" />
-          <input
-            type="date"
-            className="input-base text-sm py-1.5"
-            value={filters.from_date}
-            max={new Date().toISOString().split('T')[0]}
-            onChange={(e) => setFilters(prev => ({ ...prev, from_date: e.target.value, page: 1 }))}
-          />
-          <span className="text-slate-300">→</span>
-          <input
-            type="date"
-            className="input-base text-sm py-1.5"
-            value={filters.to_date}
-            max={new Date().toISOString().split('T')[0]}
-            onChange={(e) => setFilters(prev => ({ ...prev, to_date: e.target.value, page: 1 }))}
-          />
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <input
+              type="date"
+              className="px-3 py-2 border border-slate-200 rounded-lg text-sm"
+              value={filters.from_date}
+              max={new Date().toISOString().split('T')[0]}
+              onChange={(e) => setFilters(prev => ({ ...prev, from_date: e.target.value, page: 1 }))}
+            />
+            <span className="text-slate-400">to</span>
+            <input
+              type="date"
+              className="px-3 py-2 border border-slate-200 rounded-lg text-sm"
+              value={filters.to_date}
+              max={new Date().toISOString().split('T')[0]}
+              onChange={(e) => setFilters(prev => ({ ...prev, to_date: e.target.value, page: 1 }))}
+            />
+          </div>
+          <button 
+            className="p-2 text-slate-400 hover:text-ink transition-colors text-sm font-medium"
+            onClick={resetFilters}
+            title="Reset Filters"
+          >
+            Reset
+          </button>
         </div>
-
-        <select
-          className="input-base w-32 py-1.5 text-sm"
-          value={filters.per_page}
-          onChange={(e) => setFilters(prev => ({ ...prev, per_page: e.target.value, page: 1 }))}
-        >
-          <option value="10">10 / page</option>
-          <option value="20">20 / page</option>
-          <option value="50">50 / page</option>
-        </select>
-
-        <button 
-          onClick={resetFilters}
-          className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-all"
-          title="Reset Filters"
-        >
-          <X size={18} />
-        </button>
       </div>
 
       {/* Table */}
@@ -251,15 +252,15 @@ export default function Modifiers() {
                   <div className="flex items-center justify-end gap-2">
                     <button
                       onClick={() => { setEditingItem(item); setIsModalOpen(true); }}
-                      className="p-2 text-slate-400 hover:text-ink hover:bg-white rounded-lg border border-transparent hover:border-slate-100 shadow-sm"
+                      className="p-2 text-slate-400 hover:text-ink hover:bg-slate-50 rounded-lg transition-all"
                     >
-                      <Edit2 size={16} />
+                      <FiEdit2 size={16} />
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="p-2 text-slate-400 hover:text-rose-500 hover:bg-white rounded-lg border border-transparent hover:border-slate-100 shadow-sm"
+                      className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
                     >
-                      <Trash2 size={16} />
+                      <FiTrash2 size={16} />
                     </button>
                   </div>
                 </td>
@@ -271,7 +272,7 @@ export default function Modifiers() {
         {currentData?.data?.length === 0 && !isLoading && (
           <div className="py-20 flex flex-col items-center justify-center text-slate-400">
             <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-              <Search size={32} strokeWidth={1.5} />
+              <FiSearch size={32} strokeWidth={1.5} />
             </div>
             <p>No {activeTab} found matching your criteria</p>
           </div>
@@ -288,23 +289,32 @@ export default function Modifiers() {
             </span>{' '}
             of <span className="font-medium text-ink">{currentData.meta.total}</span> entries
           </p>
-          <div className="flex gap-2">
-            <button
-              disabled={filters.page === 1}
-              onClick={() => setFilters(prev => ({ ...prev, page: prev.page - 1 }))}
-              className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-30 transition-all font-medium flex items-center"
-            >
-              <ChevronLeft size={18} />
-              <span className="mr-1">Prev</span>
-            </button>
-            <button
-              disabled={filters.page === currentData.meta.total_pages}
-              onClick={() => setFilters(prev => ({ ...prev, page: prev.page + 1 }))}
-              className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-30 transition-all font-medium flex items-center"
-            >
-              <span className="ml-1">Next</span>
-              <ChevronRight size={18} />
-            </button>
+            <div className="flex items-center gap-2">
+              <select
+                className="mr-4 px-2 py-1 text-sm border border-slate-200 rounded-md bg-white"
+                value={filters.per_page}
+                onChange={(e) => setFilters(prev => ({ ...prev, per_page: parseInt(e.target.value), page: 1 }))}
+              >
+                <option value="10">10 / page</option>
+                <option value="20">20 / page</option>
+                <option value="50">50 / page</option>
+              </select>
+              <button
+                disabled={filters.page === 1}
+                onClick={() => setFilters(prev => ({ ...prev, page: prev.page - 1 }))}
+                className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-30 transition-all font-medium flex items-center"
+              >
+                <FiChevronLeft size={18} />
+                <span className="mr-1 text-sm">Prev</span>
+              </button>
+              <button
+                disabled={filters.page === currentData.meta.total_pages}
+                onClick={() => setFilters(prev => ({ ...prev, page: prev.page + 1 }))}
+                className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-30 transition-all font-medium flex items-center"
+              >
+                <span className="ml-1 text-sm">Next</span>
+                <FiChevronRight size={18} />
+              </button>
           </div>
         </div>
       )}
@@ -331,7 +341,7 @@ export default function Modifiers() {
                   {editingItem ? `Edit ${activeTab.slice(0, -1)}` : `Add New ${activeTab.slice(0, -1)}`}
                 </h2>
                 <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-slate-50 rounded-full transition-colors">
-                  <X size={20} className="text-slate-400" />
+                  <FiX size={20} className="text-slate-400" />
                 </button>
               </div>
               <div className="p-8">

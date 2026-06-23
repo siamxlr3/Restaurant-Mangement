@@ -17,7 +17,21 @@ class ModifierService {
             .is('deleted_at', null);
 
         if (search) {
-            query = query.or(`name.ilike.%${search}%,menu_item.name.ilike.%${search}%`);
+            // Step 1: Get item IDs matching the search
+            const { data: items } = await supabase
+                .from('menu_item')
+                .select('id')
+                .ilike('name', `%${search}%`)
+                .is('deleted_at', null);
+            
+            const itemIds = items?.map(i => i.id) || [];
+            
+            // Step 2: Build OR filter
+            let filterStr = `name.ilike."%${search}%"`;
+            if (itemIds.length > 0) {
+                filterStr += `,item_id.in.(${itemIds.join(',')})`;
+            }
+            query = query.or(filterStr);
         }
 
         if (from_date && to_date) {

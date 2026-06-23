@@ -12,7 +12,10 @@ export const variantsApi = createApi({
         url: '/variants',
         params,
       }),
-      providesTags: ['Variant'],
+      providesTags: (result) => 
+        result?.data 
+          ? [...result.data.map(({ id }) => ({ type: 'Variant', id })), { type: 'Variant', id: 'LIST' }]
+          : [{ type: 'Variant', id: 'LIST' }],
     }),
     getVariantsByItem: builder.query({
       query: (itemId) => `/variants/item/${itemId}`,

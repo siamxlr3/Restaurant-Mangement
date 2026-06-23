@@ -95,6 +95,14 @@ const MenuItems = () => {
       ),
     },
     {
+      key: 'description',
+      header: 'Description',
+      className: 'max-w-[200px]',
+      render: (row) => (
+        <p className="text-xs text-slate-500 line-clamp-2">{row.description || '—'}</p>
+      ),
+    },
+    {
       key: 'category',
       header: 'Category',
       render: (row) => (
@@ -136,10 +144,10 @@ const MenuItems = () => {
     },
     {
       key: 'actions',
-      header: '',
+      header: 'Actions',
       className: 'text-right',
       render: (row) => (
-        <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center justify-end gap-1">
           <button
             onClick={() => {
               setEditingItem(row);
@@ -191,7 +199,7 @@ const MenuItems = () => {
         onFilterChange={handleFilterChange}
         actions={
           <select
-            className="input-base w-48"
+            className="px-4 py-2 border border-slate-200 rounded-lg focus:outline-none bg-white text-sm w-48"
             value={filters.category_id}
             onChange={(e) => handleFilterChange({ ...filters, category_id: e.target.value, page: 1 })}
           >

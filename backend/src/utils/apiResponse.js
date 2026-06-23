@@ -2,7 +2,7 @@
  * Standard API Response Utility
  */
 const sendResponse = (res, statusCode, success, message, data = null, meta = null) => {
-    return res.status(statusCode).json({
+    return res.status(parseInt(statusCode)).json({
         success,
         message,
         data,
@@ -11,7 +11,7 @@ const sendResponse = (res, statusCode, success, message, data = null, meta = nul
 };
 
 const sendError = (res, statusCode, message, error = null) => {
-    return res.status(statusCode).json({
+    return res.status(parseInt(statusCode)).json({
         success: false,
         message,
         error: process.env.NODE_ENV === 'development' ? error : undefined,

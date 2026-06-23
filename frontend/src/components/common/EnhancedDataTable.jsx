@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, ChevronLeft, ChevronRight, RotateCcw, Calendar } from 'lucide-react';
+import { FiSearch, FiChevronLeft, FiChevronRight, FiRotateCcw, FiCalendar } from 'react-icons/fi';
 import { Spinner } from '../ui/Common';
 
 const EnhancedDataTable = ({
@@ -56,25 +56,20 @@ const EnhancedDataTable = ({
   return (
     <div className="flex flex-col h-full">
       {/* Header / Filters Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <div className="flex flex-col gap-1">
-          {title && <h2 className="text-lg font-semibold text-ink">{title}</h2>}
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6 py-2">
+        <div className="flex items-center gap-3 flex-1 min-w-[300px]">
+          <div className="relative flex-1">
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input
               type="text"
               placeholder="Search..."
-              className="input-base pl-10"
+              className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Status Filter */}
           <select
-            className="input-base py-2"
+            className="px-4 py-2 border border-slate-200 rounded-lg focus:outline-none bg-white text-sm"
             value={filters.status || 'all'}
             onChange={handleStatusChange}
           >
@@ -82,21 +77,22 @@ const EnhancedDataTable = ({
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
+          {actions}
+        </div>
 
-          {/* Date Range */}
-          <div className="flex items-center gap-2 bg-white rounded-md border border-slate-200 px-2">
-            <Calendar size={16} className="text-slate-400" />
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <input
               type="date"
-              className="border-none text-sm p-1 outline-none"
+              className="px-3 py-2 border border-slate-200 rounded-lg text-sm"
               value={filters.from_date || ''}
               onChange={(e) => handleDateChange('from_date', e.target.value)}
               max={new Date().toISOString().split('T')[0]}
             />
-            <span className="text-slate-400">→</span>
+            <span className="text-slate-400">to</span>
             <input
               type="date"
-              className="border-none text-sm p-1 outline-none"
+              className="px-3 py-2 border border-slate-200 rounded-lg text-sm"
               value={filters.to_date || ''}
               onChange={(e) => handleDateChange('to_date', e.target.value)}
               max={new Date().toISOString().split('T')[0]}
@@ -105,13 +101,11 @@ const EnhancedDataTable = ({
 
           <button
             onClick={resetFilters}
-            className="p-2 text-slate-500 hover:text-ink hover:bg-slate-100 rounded-md transition-colors"
+            className="p-2 text-slate-500 hover:text-ink transition-colors font-medium text-sm"
             title="Reset Filters"
           >
-            <RotateCcw size={18} />
+            Reset
           </button>
-
-          {actions}
         </div>
       </div>
 
@@ -150,9 +144,9 @@ const EnhancedDataTable = ({
                   <td colSpan={columns.length} className="py-20 text-center">
                     <div className="flex flex-col items-center">
                       <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 text-slate-300">
-                        <Search size={32} />
+                        <FiSearch size={32} />
                       </div>
-                      <p className="font-medium text-slate-400">No records found</p>
+                      <p className="font-medium text-ink">No records found</p>
                       <p className="text-sm text-slate-400 mt-1">Try adjusting your filters or search term</p>
                     </div>
                   </td>
@@ -183,13 +177,13 @@ const EnhancedDataTable = ({
             </div>
 
             <div className="flex items-center gap-1">
-              <button
-                disabled={meta.page === 1}
-                onClick={() => handlePageChange(meta.page - 1)}
-                className="p-1.5 rounded border border-slate-200 enabled:hover:bg-slate-50 disabled:opacity-50 transition-colors"
-              >
-                <ChevronLeft size={16} />
-              </button>
+                <button
+                  disabled={meta.page === 1}
+                  onClick={() => handlePageChange(meta.page - 1)}
+                  className="p-1.5 rounded border border-slate-200 enabled:hover:bg-slate-50 disabled:opacity-50 transition-colors"
+                >
+                  <FiChevronLeft size={16} />
+                </button>
               
               <div className="flex items-center gap-1 px-2">
                 {[...Array(meta.total_pages)].map((_, i) => {
@@ -221,13 +215,13 @@ const EnhancedDataTable = ({
                 })}
               </div>
 
-              <button
-                disabled={meta.page === meta.total_pages}
-                onClick={() => handlePageChange(meta.page + 1)}
-                className="p-1.5 rounded border border-slate-200 enabled:hover:bg-slate-50 disabled:opacity-50 transition-colors"
-              >
-                <ChevronRight size={16} />
-              </button>
+                <button
+                  disabled={meta.page === meta.total_pages}
+                  onClick={() => handlePageChange(meta.page + 1)}
+                  className="p-1.5 rounded border border-slate-200 enabled:hover:bg-slate-50 disabled:opacity-50 transition-colors"
+                >
+                  <FiChevronRight size={16} />
+                </button>
             </div>
           </div>
         )}

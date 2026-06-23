@@ -14,7 +14,14 @@ import { toast } from 'sonner';
 import { Reorder, motion, AnimatePresence } from 'framer-motion';
 
 const CategoryManagement = () => {
-  const [filters, setFilters] = useState({ page: 1, per_page: 50, search: '', status: 'all' });
+  const [filters, setFilters] = useState({ 
+    page: 1, 
+    per_page: 50, 
+    search: '', 
+    status: 'all',
+    from_date: '',
+    to_date: ''
+  });
   const { data, isLoading, isFetching } = useGetCategoriesQuery(filters);
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
   const [updateCategory, { isLoading: isUpdating }] = useUpdateCategoryMutation();
@@ -89,26 +96,59 @@ const CategoryManagement = () => {
         }
       />
 
-      <div className="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-        <div className="relative flex-1">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input
-            type="text"
-            placeholder="Quick search categories..."
-            className="input-base pl-10"
-            value={filters.search}
-            onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-          />
+      <div className="flex flex-wrap items-center justify-between gap-4 py-2">
+        <div className="flex items-center gap-3 flex-1 min-w-[300px]">
+          <div className="relative flex-1">
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <input
+              type="text"
+              placeholder="Search categories..."
+              className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all"
+              value={filters.search}
+              onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+            />
+          </div>
+          <select
+            className="px-4 py-2 border border-slate-200 rounded-lg focus:outline-none bg-white text-sm"
+            value={filters.status}
+            onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active Only</option>
+            <option value="inactive">Hidden Only</option>
+          </select>
         </div>
-        <select
-          className="input-base w-40"
-          value={filters.status}
-          onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-        >
-          <option value="all">All Status</option>
-          <option value="active">Active Only</option>
-          <option value="inactive">Hidden Only</option>
-        </select>
+
+        <div className="flex items-center gap-2">
+          <input
+            type="date"
+            className="px-3 py-2 border border-slate-200 rounded-lg text-sm"
+            value={filters.from_date}
+            max={new Date().toISOString().split('T')[0]}
+            onChange={(e) => setFilters(prev => ({ ...prev, from_date: e.target.value }))}
+          />
+          <span className="text-slate-400">to</span>
+          <input
+            type="date"
+            className="px-3 py-2 border border-slate-200 rounded-lg text-sm"
+            value={filters.to_date}
+            max={new Date().toISOString().split('T')[0]}
+            onChange={(e) => setFilters(prev => ({ ...prev, to_date: e.target.value }))}
+          />
+          <button 
+            className="p-2 text-slate-400 hover:text-ink transition-colors text-sm font-medium"
+            onClick={() => setFilters({ 
+              page: 1, 
+              per_page: 50, 
+              search: '', 
+              status: 'all',
+              from_date: '',
+              to_date: ''
+            })}
+          >
+            Reset
+          </button>
+        </div>
       </div>
 
       {isLoading ? (
@@ -137,9 +177,6 @@ const CategoryManagement = () => {
 
                 <div className="flex-1">
                   <h3 className="font-semibold text-ink">{cat.name}</h3>
-                  <p className="text-xs text-slate-400 stat-mono uppercase tracking-wider">
-                    ID: {cat.id.split('-')[0]}
-                  </p>
                 </div>
 
                 <div className="flex items-center gap-4">

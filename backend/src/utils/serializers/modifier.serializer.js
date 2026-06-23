@@ -7,6 +7,7 @@ const serializeModifier = (modifier) => {
     return {
         id: modifier.id,
         item_id: modifier.item_id,
+        menu_item: modifier.menu_item ? { name: modifier.menu_item.name } : null,
         name: modifier.name,
         extra_price: parseFloat(modifier.extra_price),
         is_required: modifier.is_required,

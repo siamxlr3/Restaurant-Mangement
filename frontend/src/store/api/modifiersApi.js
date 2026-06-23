@@ -12,7 +12,10 @@ export const modifiersApi = createApi({
         url: '/modifiers',
         params,
       }),
-      providesTags: ['Modifier'],
+      providesTags: (result) => 
+        result?.data 
+          ? [...result.data.map(({ id }) => ({ type: 'Modifier', id })), { type: 'Modifier', id: 'LIST' }]
+          : [{ type: 'Modifier', id: 'LIST' }],
     }),
     getModifiersByItem: builder.query({
       query: (itemId) => `/modifiers/item/${itemId}`,

@@ -1,4 +1,4 @@
-const { supabase } = require('../config/supabase');
+const { supabase, supabaseAdmin } = require('../config/supabase');
 
 class ItemService {
     /**
@@ -147,7 +147,7 @@ class ItemService {
         const fileName = `${Date.now()}.${fileExt}`;
         const filePath = `items/${fileName}`;
 
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabaseAdmin.storage
             .from('menu-items')
             .upload(filePath, file.buffer, {
                 contentType: file.mimetype,
@@ -156,7 +156,7 @@ class ItemService {
 
         if (uploadError) throw uploadError;
 
-        const { data: { publicUrl } } = supabase.storage
+        const { data: { publicUrl } } = supabaseAdmin.storage
             .from('menu-items')
             .getPublicUrl(filePath);
 
