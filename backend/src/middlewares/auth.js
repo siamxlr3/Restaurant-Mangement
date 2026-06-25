@@ -6,7 +6,13 @@ const { sendError } = require('../utils/apiResponse');
  */
 const auth = (req, res, next) => {
     const authHeader = req.headers.authorization;
+    
+    // Development bypass: provide a mock user if no token is provided in dev environment
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        if (process.env.NODE_ENV === 'development') {
+            req.user = { id: 'dev-user-id', role: 'admin', email: 'dev@example.com' };
+            return next();
+        }
         return sendError(res, 401, 'Unauthorized: No token provided');
     }
 

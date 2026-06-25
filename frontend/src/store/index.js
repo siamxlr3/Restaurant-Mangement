@@ -13,6 +13,10 @@ import { itemsApi } from './api/itemsApi'
 import { variantsApi } from './api/variantsApi'
 import { modifiersApi } from './api/modifiersApi'
 import { tablesApi } from './api/tablesApi'
+import { ordersApi } from './api/ordersApi'
+import { kitchenApi } from './api/kitchenApi'
+import { upsellApi } from './api/upsellApi'
+
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +34,10 @@ export const store = configureStore({
     [variantsApi.reducerPath]: variantsApi.reducer,
     [modifiersApi.reducerPath]: modifiersApi.reducer,
     [tablesApi.reducerPath]: tablesApi.reducer,
+    [ordersApi.reducerPath]: ordersApi.reducer,
+    [kitchenApi.reducerPath]: kitchenApi.reducer,
+    [upsellApi.reducerPath]: upsellApi.reducer,
+
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -45,6 +53,10 @@ export const store = configureStore({
       itemsApi.middleware,
       variantsApi.middleware,
       modifiersApi.middleware,
-      tablesApi.middleware
+      tablesApi.middleware,
+      ordersApi.middleware,
+      kitchenApi.middleware,
+      upsellApi.middleware
+
     ),
 })

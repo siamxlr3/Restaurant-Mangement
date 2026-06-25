@@ -53,6 +53,10 @@ app.use('/api/v1/items', require('./routes/v1/item.routes'));
 app.use('/api/v1/variants', require('./routes/v1/variant.routes'));
 app.use('/api/v1/modifiers', require('./routes/v1/modifier.routes'));
 app.use('/api/v1/tables', require('./routes/v1/table.routes'));
+app.use('/api/v1/orders', require('./routes/v1/order.routes'));
+app.use('/api/v1/kitchen', require('./routes/v1/kitchen.routes'));
+app.use('/api/v1/upsell', require('./routes/v1/upsell.routes'));
+
 
 // Global Error Handler
 app.use(errorHandler);

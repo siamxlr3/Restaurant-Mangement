@@ -89,7 +89,6 @@ const MenuItems = () => {
           </div>
           <div>
             <p className="font-semibold text-ink line-clamp-1">{row.name}</p>
-            <p className="text-[10px] text-slate-400 stat-mono uppercase tracking-tighter">ID: {row.id.split('-')[0]}</p>
           </div>
         </div>
       ),
