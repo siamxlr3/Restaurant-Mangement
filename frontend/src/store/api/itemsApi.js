@@ -13,6 +13,27 @@ export const itemsApi = createApi({
         params,
       }),
       providesTags: ['Item'],
+      // Supabase Realtime — item availability sync
+      async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded, cacheEntryRemoved, dispatch }) {
+        let channel = null
+        try {
+          await cacheDataLoaded
+          channel = supabase
+            .channel('menu_availability')
+            .on('postgres_changes', { 
+              event: 'UPDATE', 
+              schema: 'public', 
+              table: 'menu_item',
+              filter: 'is_available=is.not.null' 
+            }, (payload) => {
+              // Invalidate individual item and the list
+              dispatch(itemsApi.util.invalidateTags([{ type: 'Item', id: payload.new.id }, 'Item']))
+            })
+            .subscribe()
+        } catch {}
+        await cacheEntryRemoved
+        if (channel) supabase.removeChannel(channel)
+      },
     }),
     getItemById: builder.query({
       query: (id) => `/items/${id}`,

@@ -1,13 +1,14 @@
 const { sendError } = require('../utils/apiResponse');
 
 /**
- * Middleware to validate request body using a Zod schema.
+ * Middleware to validate request data using a Zod schema.
  * @param {import('zod').ZodSchema} schema - The Zod schema to validate against.
+ * @param {string} property - The property of the request object to validate (body, query, params).
  */
-const validate = (schema) => {
+const validate = (schema, property = 'body') => {
     return (req, res, next) => {
         try {
-            schema.parse(req.body);
+            schema.parse(req[property]);
             next();
         } catch (error) {
             const errorMessage = error.errors ? error.errors.map(e => e.message).join(', ') : error.message;

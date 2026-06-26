@@ -39,4 +39,6 @@ module.exports = {
     tableWriteLimiter: writeLimiter,
     orderReadLimiter: readLimiter,
     orderWriteLimiter: writeLimiter,
+    billingReadLimiter: readLimiter,
+    billingWriteLimiter: writeLimiter,
 };

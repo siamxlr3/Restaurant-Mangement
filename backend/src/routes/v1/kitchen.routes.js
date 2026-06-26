@@ -3,7 +3,7 @@ const router = express.Router();
 const kitchenController = require('../../controllers/kitchen.controller');
 const validate = require('../../middlewares/validate');
 const { updateTicketStatusSchema, createTicketSchema } = require('../../validators/kitchen_ticket.validator');
-const authenticate = require('../../middlewares/auth');
+const { authenticate } = require('../../middlewares/auth');
 const authorize = require('../../middlewares/rbac');
 const rateLimit = require('express-rate-limit');
 

@@ -17,6 +17,7 @@ import Bills from '../pages/billing/Bills'
 import Payments from '../pages/billing/Payments'
 import Discounts from '../pages/billing/Discounts'
 import TaxSettings from '../pages/billing/TaxSettings'
+import PaymentGatewayManagement from '../pages/payment-gateways/PaymentGatewayManagement'
 
 import Ingredients from '../pages/inventory/Ingredients'
 import Recipes from '../pages/inventory/Recipes'
@@ -69,6 +70,7 @@ export default function AppRoutes() {
         <Route path="/billing/payments" element={<Payments />} />
         <Route path="/billing/discounts" element={<Discounts />} />
         <Route path="/billing/tax-settings" element={<TaxSettings />} />
+        <Route path="/billing/payment-gateways" element={<PaymentGatewayManagement />} />
 
         <Route path="/inventory/ingredients" element={<Ingredients />} />
         <Route path="/inventory/recipes" element={<Recipes />} />

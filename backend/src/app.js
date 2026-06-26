@@ -56,6 +56,10 @@ app.use('/api/v1/tables', require('./routes/v1/table.routes'));
 app.use('/api/v1/orders', require('./routes/v1/order.routes'));
 app.use('/api/v1/kitchen', require('./routes/v1/kitchen.routes'));
 app.use('/api/v1/upsell', require('./routes/v1/upsell.routes'));
+app.use('/api/v1/bills', require('./routes/v1/bill.routes'));
+app.use('/api/v1/payments', require('./routes/v1/payment.routes'));
+app.use('/api/v1/payment-gateways', require('./routes/v1/payment.gateway.routes'));
+app.use('/api/webhooks', require('./routes/webhook.routes'));
 
 
 // Global Error Handler

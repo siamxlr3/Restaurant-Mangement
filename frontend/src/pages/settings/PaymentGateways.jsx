@@ -47,10 +47,34 @@ const GATEWAYS = [
     color: 'text-pink-500',
     bg:    'bg-pink-50',
     fields: [
-      { key: 'bkash_app_key',    label: 'App Key',        desc: 'bKash merchant app key',    is_encrypted: true  },
-      { key: 'bkash_app_secret', label: 'App Secret',     desc: 'bKash merchant app secret', is_encrypted: true  },
-      { key: 'bkash_username',   label: 'API Username',   desc: 'bKash API username',        is_encrypted: false },
-      { key: 'bkash_password',   label: 'API Password',   desc: 'bKash API password',        is_encrypted: true  },
+      { key: 'bkash_app_key',    label: 'App Key',      desc: 'bKash merchant app key',    is_encrypted: true  },
+      { key: 'bkash_app_secret', label: 'App Secret',   desc: 'bKash merchant app secret', is_encrypted: true  },
+      { key: 'bkash_username',   label: 'API Username', desc: 'bKash API username',        is_encrypted: false },
+      { key: 'bkash_password',   label: 'API Password', desc: 'bKash API password',        is_encrypted: true  },
+    ],
+  },
+  {
+    id:    'rocket',
+    name:  'Rocket (DBBL)',
+    desc:  'Dutch-Bangla Bank mobile banking payments',
+    icon:  Smartphone,
+    color: 'text-violet-500',
+    bg:    'bg-violet-50',
+    fields: [
+      { key: 'rocket_api_key',     label: 'API Key',       desc: 'Rocket merchant API key (encrypted)',       is_encrypted: true  },
+      { key: 'rocket_merchant_id', label: 'Merchant ID',   desc: 'Your Rocket / DBBL merchant ID',            is_encrypted: false },
+    ],
+  },
+  {
+    id:    'nagad',
+    name:  'Nagad',
+    desc:  'Bangladesh Post Office mobile financial service',
+    icon:  Smartphone,
+    color: 'text-orange-500',
+    bg:    'bg-orange-50',
+    fields: [
+      { key: 'nagad_merchant_id',  label: 'Merchant ID',  desc: 'Nagad merchant identifier',                 is_encrypted: false },
+      { key: 'nagad_merchant_key', label: 'Merchant Key', desc: 'Nagad merchant key for request signing',    is_encrypted: true  },
     ],
   },
 ]
