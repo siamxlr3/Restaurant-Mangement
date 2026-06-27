@@ -18,14 +18,14 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path:
+          cache-dependency-path: |
             frontend/package-lock.json
             backend/package-lock.json
 
       # Frontend
       - name: Install Frontend Dependencies
         working-directory: ./frontend
-        run: npm install
+        run: npm ci
 
       - name: Build Frontend
         working-directory: ./frontend
@@ -34,10 +34,10 @@ jobs:
       # Backend
       - name: Install Backend Dependencies
         working-directory: ./backend
-        run: npm install
+        run: npm ci
 
       # Upload frontend build
-      - name: Upload Frontend Artifacts
+      - name: Upload Frontend Build
         uses: actions/upload-artifact@v4
         with:
           name: frontend-build
