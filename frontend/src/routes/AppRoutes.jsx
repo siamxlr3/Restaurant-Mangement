@@ -6,7 +6,7 @@ import DashboardOverview from '../pages/dashboard/DashboardOverview'
 import POS from '../pages/operations/POS'
 import KitchenDisplay from '../pages/operations/KitchenDisplay'
 import FloorMap from '../pages/operations/FloorMap'
-import Reservations from '../pages/operations/Reservations'
+import Reservations from '../pages/operations/reservations/Reservations'
 import Waitlist from '../pages/operations/Waitlist'
 
 import MenuItems from '../pages/menu/MenuItems'

@@ -27,4 +27,23 @@ const auth = (req, res, next) => {
     }
 };
 
-module.exports = { authenticate: auth };
+/**
+ * Middleware to authorize roles.
+ */
+const authorize = (roles = []) => {
+    if (typeof roles === 'string') {
+        roles = [roles];
+    }
+
+    return (req, res, next) => {
+        if (!req.user || (roles.length && !roles.includes(req.user.role))) {
+            return sendError(res, 403, 'Forbidden: You do not have permission to perform this action');
+        }
+        next();
+    };
+};
+
+module.exports = { 
+    authenticate: auth,
+    authorize
+};

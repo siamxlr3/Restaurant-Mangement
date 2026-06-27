@@ -17,6 +17,7 @@ import { ordersApi } from './api/ordersApi'
 import { kitchenApi } from './api/kitchenApi'
 import { upsellApi } from './api/upsellApi'
 import { paymentGatewayApi } from './api/paymentGatewayApi'
+import { reservationApi } from './api/reservationApi'
 
 
 export const store = configureStore({
@@ -39,6 +40,7 @@ export const store = configureStore({
     [kitchenApi.reducerPath]: kitchenApi.reducer,
     [upsellApi.reducerPath]: upsellApi.reducer,
     [paymentGatewayApi.reducerPath]: paymentGatewayApi.reducer,
+    [reservationApi.reducerPath]: reservationApi.reducer,
 
   },
   middleware: (getDefaultMiddleware) =>
@@ -59,7 +61,8 @@ export const store = configureStore({
       ordersApi.middleware,
       kitchenApi.middleware,
       upsellApi.middleware,
-      paymentGatewayApi.middleware
+      paymentGatewayApi.middleware,
+      reservationApi.middleware
 
     ),
 })
