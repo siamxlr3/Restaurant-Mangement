@@ -1,6 +1,8 @@
 const { supabase } = require('../config/supabase');
 const kitchenService = require('./kitchen.service');
 const { serializeTicket } = require('../utils/serializers/kitchen_ticket.serializer');
+const billService = require('./bill.service');
+const paymentService = require('./payment.service');
 
 // ── Status lifecycle ─────────────────────────────────────────
 const STATUS_TRANSITIONS = {
@@ -180,13 +182,15 @@ class OrderService {
         return this.getOrderById(order.id);
     }
 
-    /**
-     * POST /orders/:id/items
-     * Add a new item to an existing open order.
-     */
     async addOrderItem(orderId, item) {
         const order = await this._ensureOrderEditable(orderId);
         await this._insertOrderItems(order.id, [item]);
+
+        // If order is confirmed, update the bill
+        if (order.status === 'confirmed') {
+            await billService.generateBill(orderId);
+        }
+
         return this.getOrderById(orderId);
     }
 
@@ -219,6 +223,17 @@ class OrderService {
             .from('orders')
             .update({ void_reason: reason })
             .eq('id', orderId);
+
+        // Fetch current order status to see if it's confirmed
+        const { data: currentOrder } = await supabase
+            .from('orders')
+            .select('status')
+            .eq('id', orderId)
+            .single();
+
+        if (currentOrder && currentOrder.status === 'confirmed') {
+            await billService.generateBill(orderId);
+        }
 
         return this.getOrderById(orderId);
     }
@@ -257,8 +272,50 @@ class OrderService {
         if (newStatus === 'confirmed') {
             // Ensure a kitchen ticket exists or is updated
             // In a real app, maybe we'd update existing ticket status
+            await billService.generateBill(orderId);
         }
         // ---------------------------
+
+        if (newStatus === 'closed') {
+            // Fetch any existing bill
+            const { data: bills } = await supabase
+                .from('bills')
+                .select('id, total, status')
+                .eq('order_id', orderId)
+                .is('deleted_at', null);
+
+            let bill = bills && bills[0];
+            let billId = bill ? bill.id : null;
+            let billTotal = bill ? bill.total : 0;
+            let billStatus = bill ? bill.status : null;
+
+            if (!bill) {
+                try {
+                    const newBill = await billService.generateBill(orderId);
+                    if (newBill) {
+                        billId = newBill.id;
+                        billTotal = newBill.total;
+                        billStatus = newBill.status;
+                    }
+                } catch (err) {
+                    console.error('Failed to auto-generate bill on closing:', err.message);
+                }
+            }
+
+            if (billId && billStatus !== 'paid') {
+                try {
+                    await paymentService.createPayment({
+                        bill_id: billId,
+                        method: 'cash',
+                        amount: billTotal,
+                        received_amount: parseFloat(billTotal),
+                        change_amount: 0
+                    });
+                } catch (err) {
+                    console.error('Failed to auto-record cash payment on closing:', err.message);
+                }
+            }
+        }
 
         // Release table when order closes for dine-in
         if (newStatus === 'closed' && current.type === 'dine-in' && current.table_id) {

@@ -178,6 +178,20 @@ class BillService {
                 .from('orders')
                 .update({ status: 'closed' })
                 .eq('id', bill.order_id);
+
+            // Fetch order details to release table if dine-in
+            const { data: ord } = await supabase
+                .from('orders')
+                .select('type, table_id')
+                .eq('id', bill.order_id)
+                .single();
+
+            if (ord && ord.type === 'dine-in' && ord.table_id) {
+                await supabase
+                    .from('restaurant_table')
+                    .update({ status: 'cleaning' })
+                    .eq('id', ord.table_id);
+            }
         }
 
         return data;

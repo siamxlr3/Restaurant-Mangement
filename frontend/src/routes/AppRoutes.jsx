@@ -14,7 +14,6 @@ import Categories from '../pages/menu/Categories'
 import Modifiers from '../pages/menu/Modifiers'
 
 import Bills from '../pages/billing/Bills'
-import Payments from '../pages/billing/Payments'
 import Discounts from '../pages/billing/Discounts'
 import TaxSettings from '../pages/billing/TaxSettings'
 import PaymentGatewayManagement from '../pages/payment-gateways/PaymentGatewayManagement'
@@ -67,7 +66,6 @@ export default function AppRoutes() {
         <Route path="/menu/modifiers" element={<Modifiers />} />
 
         <Route path="/billing/bills" element={<Bills />} />
-        <Route path="/billing/payments" element={<Payments />} />
         <Route path="/billing/discounts" element={<Discounts />} />
         <Route path="/billing/tax-settings" element={<TaxSettings />} />
         <Route path="/billing/payment-gateways" element={<PaymentGatewayManagement />} />

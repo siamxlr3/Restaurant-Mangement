@@ -5,7 +5,7 @@ import { mockPayments, mockDiscounts } from '../mockData'
 export const billingApi = createApi({
   reducerPath: 'billingApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/api/v1' }),
-  tagTypes: ['Bill'],
+  tagTypes: ['Bill', 'Payment'],
   endpoints: (builder) => ({
     // ── Get All Bills ─────────────────────────────────────────
     getBills: builder.query({

@@ -1,4 +1,5 @@
 const { supabase } = require('../config/supabase');
+const billService = require('./bill.service');
 
 class PaymentService {
     async createPayment(paymentData) {
@@ -50,13 +51,10 @@ class PaymentService {
         const totalPaid = allPayments.reduce((sum, p) => sum + parseFloat(p.amount), 0);
 
         if (totalPaid >= parseFloat(bill.total)) {
-            const { error: updateError } = await supabase
-                .from('bills')
-                .update({ status: 'paid' })
-                .eq('id', bill_id);
-
-            if (updateError) {
-                console.error('Error updating bill status:', updateError);
+            try {
+                await billService.updateBillStatus(bill_id, 'paid');
+            } catch (error) {
+                console.error('Error updating bill status:', error.message);
             }
         }
 

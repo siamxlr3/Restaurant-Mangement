@@ -50,7 +50,6 @@ export const navSections = [
     path: '/billing/bills',
     children: [
       { label: 'Bills', path: '/billing/bills' },
-      { label: 'Payments', path: '/billing/payments' },
       { label: 'Discounts', path: '/billing/discounts' },
       { label: 'Tax settings', path: '/billing/tax-settings' },
     ],
