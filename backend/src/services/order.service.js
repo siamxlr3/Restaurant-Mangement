@@ -268,11 +268,30 @@ class OrderService {
 
         if (updateError) throw new Error(updateError.message);
 
-        // --- Kitchen Integration ---
+        // --- Kitchen Integration & Stock Decrement ---
         if (newStatus === 'confirmed') {
             // Ensure a kitchen ticket exists or is updated
             // In a real app, maybe we'd update existing ticket status
             await billService.generateBill(orderId);
+        } else if (newStatus === 'preparing') {
+            try {
+                const { data: items } = await supabase
+                    .from('order_items')
+                    .select('menu_item_id, quantity')
+                    .eq('order_id', orderId)
+                    .neq('status', 'voided');
+
+                if (items && items.length > 0) {
+                    const ingredientService = require('./ingredient.service');
+                    const orderItems = items.map(item => ({
+                        item_id: item.menu_item_id,
+                        quantity: item.quantity
+                    }));
+                    await ingredientService.decrementStockForOrder(orderId, orderItems);
+                }
+            } catch (err) {
+                console.error(`Status transition stock decrement error: ${err.message}`);
+            }
         }
         // ---------------------------
 

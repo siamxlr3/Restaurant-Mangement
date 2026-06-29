@@ -109,6 +109,23 @@ class KitchenService {
             .single();
 
         if (error) throw new Error(error.message);
+
+        // --- Stock decrement integration on preparing status ---
+        if (status === 'preparing' && data.order_id && data.orders && data.orders.order_items) {
+            try {
+                const ingredientService = require('./ingredient.service');
+                const orderItems = data.orders.order_items.map(item => ({
+                    item_id: item.menu_item ? item.menu_item.id : null,
+                    quantity: item.quantity
+                })).filter(item => item.item_id);
+
+                await ingredientService.decrementStockForOrder(data.order_id, orderItems);
+            } catch (err) {
+                console.error(`Ticket transition stock decrement error: ${err.message}`);
+            }
+        }
+        // --------------------------------------------------------
+
         return data;
     }
 

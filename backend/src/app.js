@@ -61,6 +61,10 @@ app.use('/api/v1/payments', require('./routes/v1/payment.routes'));
 app.use('/api/v1/payment-gateways', require('./routes/v1/payment.gateway.routes'));
 app.use('/api/v1/reservations', require('./routes/v1/reservation.routes'));
 app.use('/api/v1/waitlist', require('./routes/v1/waitlist.routes'));
+app.use('/api/v1/ingredients', require('./routes/v1/ingredient.routes'));
+app.use('/api/v1/recipes', require('./routes/v1/recipe.routes'));
+app.use('/api/v1/suppliers', require('./routes/v1/supplier.routes'));
+app.use('/api/v1/purchase-orders', require('./routes/v1/purchaseOrder.routes'));
 app.use('/api/webhooks', require('./routes/webhook.routes'));
 
 
