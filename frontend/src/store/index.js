@@ -18,6 +18,7 @@ import { kitchenApi } from './api/kitchenApi'
 import { upsellApi } from './api/upsellApi'
 import { paymentGatewayApi } from './api/paymentGatewayApi'
 import { reservationApi } from './api/reservationApi'
+import { waitlistApi } from './api/waitlistApi'
 
 
 export const store = configureStore({
@@ -41,6 +42,7 @@ export const store = configureStore({
     [upsellApi.reducerPath]: upsellApi.reducer,
     [paymentGatewayApi.reducerPath]: paymentGatewayApi.reducer,
     [reservationApi.reducerPath]: reservationApi.reducer,
+    [waitlistApi.reducerPath]: waitlistApi.reducer,
 
   },
   middleware: (getDefaultMiddleware) =>
@@ -62,7 +64,8 @@ export const store = configureStore({
       kitchenApi.middleware,
       upsellApi.middleware,
       paymentGatewayApi.middleware,
-      reservationApi.middleware
+      reservationApi.middleware,
+      waitlistApi.middleware
 
     ),
 })

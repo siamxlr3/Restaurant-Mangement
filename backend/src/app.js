@@ -60,6 +60,7 @@ app.use('/api/v1/bills', require('./routes/v1/bill.routes'));
 app.use('/api/v1/payments', require('./routes/v1/payment.routes'));
 app.use('/api/v1/payment-gateways', require('./routes/v1/payment.gateway.routes'));
 app.use('/api/v1/reservations', require('./routes/v1/reservation.routes'));
+app.use('/api/v1/waitlist', require('./routes/v1/waitlist.routes'));
 app.use('/api/webhooks', require('./routes/webhook.routes'));
 
 
