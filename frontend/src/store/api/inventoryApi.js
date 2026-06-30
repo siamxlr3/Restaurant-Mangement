@@ -1,33 +1,37 @@
-import { createApi } from '@reduxjs/toolkit/query/react'
-import { fakeBaseQuery } from './fakeBaseQuery'
-import {
-  mockIngredients,
-  mockSuppliers,
-  mockPurchaseOrders,
-  mockReorderSuggestions,
-} from '../mockData'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const inventoryApi = createApi({
   reducerPath: 'inventoryApi',
-  baseQuery: fakeBaseQuery({
-    '/inventory/ingredients': () => mockIngredients,
-    '/inventory/suppliers': () => mockSuppliers,
-    '/inventory/purchase-orders': () => mockPurchaseOrders,
-    '/inventory/reorder-suggestions': () => mockReorderSuggestions,
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:5000/api/v1',
   }),
+  tagTypes: ['ReorderSuggestion', 'PurchaseOrder'],
   endpoints: (builder) => ({
-    getIngredients: builder.query({ query: () => ({ url: '/inventory/ingredients' }) }),
-    getSuppliers: builder.query({ query: () => ({ url: '/inventory/suppliers' }) }),
-    getPurchaseOrders: builder.query({ query: () => ({ url: '/inventory/purchase-orders' }) }),
     getReorderSuggestions: builder.query({
-      query: () => ({ url: '/inventory/reorder-suggestions' }),
+      query: (params) => ({ url: '/reorder-suggestions', params }),
+      providesTags: (result) =>
+        result?.data
+          ? [
+              ...result.data.map(({ id }) => ({ type: 'ReorderSuggestion', id })),
+              { type: 'ReorderSuggestion', id: 'LIST' },
+            ]
+          : [{ type: 'ReorderSuggestion', id: 'LIST' }],
+    }),
+    acceptReorderSuggestion: builder.mutation({
+      query: (id) => ({
+        url: `/reorder-suggestions/${id}/accept`,
+        method: 'POST',
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: 'ReorderSuggestion', id },
+        { type: 'ReorderSuggestion', id: 'LIST' },
+        { type: 'PurchaseOrder', id: 'LIST' },
+      ],
     }),
   }),
 })
 
 export const {
-  useGetIngredientsQuery,
-  useGetSuppliersQuery,
-  useGetPurchaseOrdersQuery,
   useGetReorderSuggestionsQuery,
+  useAcceptReorderSuggestionMutation,
 } = inventoryApi
