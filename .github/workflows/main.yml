@@ -6,6 +6,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    concurrency: 
+      group: deploy
+      cancel-in-progress: true
+    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
