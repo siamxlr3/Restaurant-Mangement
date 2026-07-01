@@ -123,7 +123,7 @@ class ReorderService {
 
                 // If stock <= reorderPoint, create suggestion
                 // (Only if not already suggested and accepted - checking is_accepted is done since we deleted non-accepted)
-                if (currentStock <= reorderPoint && avgDailyUsage > 0) {
+                if (currentStock <= reorderPoint && (avgDailyUsage > 0 || currentStock === 0)) {
                     // check if there's already an accepted suggestion logic
                     const { data: existingAccepted } = await supabase
                         .from('reorder_suggestion')

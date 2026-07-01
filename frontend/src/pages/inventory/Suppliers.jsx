@@ -309,7 +309,8 @@ function PurchaseOrderModal({ onClose }) {
 
 // ── PURCHASE ORDER DETAILS & STATUS WORKFLOW MODAL ────────────────────────────
 function PurchaseOrderDetailModal({ poId, onClose }) {
-  const { data: po, isLoading } = useGetPurchaseOrderByIdQuery(poId)
+  const { data: poResponse, isLoading } = useGetPurchaseOrderByIdQuery(poId)
+  const po = poResponse?.data ?? poResponse
   const [updatePO, { isLoading: updating }] = useUpdatePurchaseOrderMutation()
   const [deletePO, { isLoading: deleting }] = useDeletePurchaseOrderMutation()
   
