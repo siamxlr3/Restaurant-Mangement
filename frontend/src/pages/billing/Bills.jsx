@@ -18,7 +18,7 @@ import { toast } from 'sonner'
 
 import PageHeader from '../../components/ui/PageHeader'
 import { Badge, Spinner, EmptyState } from '../../components/ui/Common'
-import PaymentModals from './PaymentModals'
+import { PaymentModals } from './Payments'
 import {
   useGetBillsQuery,
   useGetPaymentsQuery,

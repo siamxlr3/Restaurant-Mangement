@@ -23,6 +23,8 @@ import { ingredientsApi } from './api/ingredientsApi'
 import { recipesApi } from './api/recipesApi'
 import { suppliersApi } from './api/suppliersApi'
 import { purchaseOrdersApi } from './api/purchaseOrdersApi'
+import { cmsApi } from './api/cmsApi'
+import { reportsApi } from './api/reportsApi'
 
 
 export const store = configureStore({
@@ -51,7 +53,8 @@ export const store = configureStore({
     [recipesApi.reducerPath]: recipesApi.reducer,
     [suppliersApi.reducerPath]: suppliersApi.reducer,
     [purchaseOrdersApi.reducerPath]: purchaseOrdersApi.reducer,
-
+    [cmsApi.reducerPath]: cmsApi.reducer,
+    [reportsApi.reducerPath]: reportsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -78,6 +81,7 @@ export const store = configureStore({
       recipesApi.middleware,
       suppliersApi.middleware,
       purchaseOrdersApi.middleware,
-
+      cmsApi.middleware,
+      reportsApi.middleware,
     ),
 })

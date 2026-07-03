@@ -1,7 +1,7 @@
 const { supabaseAdmin } = require('../src/config/supabase');
 
 async function setupStorage() {
-    console.log('Checking for menu-items bucket...');
+    console.log('Checking storage buckets...');
     
     const { data: buckets, error: listError } = await supabaseAdmin.storage.listBuckets();
     
@@ -10,23 +10,27 @@ async function setupStorage() {
         return;
     }
     
-    const bucketExists = buckets.find(b => b.name === 'menu-items');
+    const requiredBuckets = ['menu-items', 'menu-images'];
     
-    if (!bucketExists) {
-        console.log('Creating menu-items bucket...');
-        const { data, error: createError } = await supabaseAdmin.storage.createBucket('menu-items', {
-            public: true,
-            allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
-            fileSizeLimit: 5242880 // 5MB
-        });
+    for (const bucketName of requiredBuckets) {
+        const bucketExists = buckets.find(b => b.name === bucketName);
         
-        if (createError) {
-            console.error('Error creating bucket:', createError.message);
+        if (!bucketExists) {
+            console.log(`Creating ${bucketName} bucket...`);
+            const { data, error: createError } = await supabaseAdmin.storage.createBucket(bucketName, {
+                public: true,
+                allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+                fileSizeLimit: 5242880 // 5MB
+            });
+            
+            if (createError) {
+                console.error(`Error creating bucket ${bucketName}:`, createError.message);
+            } else {
+                console.log(`Bucket "${bucketName}" created successfully!`);
+            }
         } else {
-            console.log('Bucket "menu-items" created successfully!');
+            console.log(`Bucket "${bucketName}" already exists.`);
         }
-    } else {
-        console.log('Bucket "menu-items" already exists.');
     }
 }
 

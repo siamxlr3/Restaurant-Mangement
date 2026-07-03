@@ -1,68 +1,111 @@
-import { ExternalLink, Eye } from 'lucide-react'
-import PageHeader from '../../components/ui/PageHeader'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ExternalLink } from 'lucide-react';
+import {
+  FiSettings, FiRadio, FiStar, FiBook, FiCoffee,
+  FiAward, FiImage, FiMessageSquare, FiClock,
+  FiMapPin, FiHelpCircle, FiCalendar,
+} from 'react-icons/fi';
+import PageHeader from '../../components/ui/PageHeader';
+import SiteConfigPanel from '../../components/cms/SiteConfigPanel';
+import TickerItemsPanel from '../../components/cms/TickerItemsPanel';
+import HeroPanel from '../../components/cms/HeroPanel';
+import StoryPanel from '../../components/cms/StoryPanel';
+import FeaturedDishesPanel from '../../components/cms/FeaturedDishesPanel';
+import FeaturesPanel from '../../components/cms/FeaturesPanel';
+import GalleryPanel from '../../components/cms/GalleryPanel';
+import ReviewsPanel from '../../components/cms/ReviewsPanel';
+import OpeningHoursPanel from '../../components/cms/OpeningHoursPanel';
+import LocationPanel from '../../components/cms/LocationPanel';
+import FaqPanel from '../../components/cms/FaqPanel';
+import ReservationConfigPanel from '../../components/cms/ReservationConfigPanel';
+
+const tabs = [
+  { id: 'site-config',        label: 'Site Config',      icon: FiSettings },
+  { id: 'ticker',             label: 'Ticker',            icon: FiRadio },
+  { id: 'hero',               label: 'Hero',              icon: FiStar },
+  { id: 'story',              label: 'Our Story',         icon: FiBook },
+  { id: 'featured-dishes',   label: 'Signature Dishes',  icon: FiCoffee },
+  { id: 'features',           label: 'Features',          icon: FiAward },
+  { id: 'gallery',            label: 'Gallery',           icon: FiImage },
+  { id: 'reviews',            label: 'Reviews',           icon: FiMessageSquare },
+  { id: 'hours',              label: 'Hours',             icon: FiClock },
+  { id: 'location',           label: 'Location',          icon: FiMapPin },
+  { id: 'faq',                label: 'FAQ',               icon: FiHelpCircle },
+  { id: 'reservation-config', label: 'Reservations',     icon: FiCalendar },
+];
 
 export default function MarketingLandingPage() {
+  const [activeTab, setActiveTab] = useState('site-config');
+
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       <PageHeader
-        title="Landing page"
-        description="The public page guests see when they search or scan your QR code."
+        title="CMS & Landing Page"
+        description="Manage all public-facing content sections of your restaurant website."
         actions={
-          <button className="btn-secondary">
+          <Link to="/home" target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center gap-2">
             <ExternalLink size={14} />
             View live page
-          </button>
+          </Link>
         }
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-1 panel p-5 space-y-4">
-          <div>
-            <label className="text-sm font-medium text-ink block mb-1.5">Hero headline</label>
-            <input type="text" defaultValue="Banglawok Kitchen" className="input-field" />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-ink block mb-1.5">Tagline</label>
-            <input type="text" defaultValue="Home-style Bangladeshi cooking, since 2014" className="input-field" />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-ink block mb-1.5">Address</label>
-            <input type="text" defaultValue="House 12, Road 7, Dhanmondi, Dhaka" className="input-field" />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-ink block mb-1.5">Hours</label>
-            <input type="text" defaultValue="12:00 PM – 11:00 PM, daily" className="input-field" />
-          </div>
-          <button className="btn-primary w-full">Save changes</button>
-        </div>
-
-        <div className="lg:col-span-2 panel p-0 overflow-hidden">
-          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-slate-100 bg-slate-50">
-            <Eye size={13} className="text-slate-400" />
-            <span className="text-xs text-slate-500">Live preview</span>
-          </div>
-          <div className="bg-ink p-10 flex flex-col items-center text-center">
-            <p className="text-xs tracking-widest text-ticket-orange uppercase mb-3">Now open</p>
-            <h2 className="font-display text-3xl font-bold text-paper mb-2">Banglawok Kitchen</h2>
-            <p className="text-slate-400 text-sm mb-6">Home-style Bangladeshi cooking, since 2014</p>
-            <button className="btn-accent">Reserve a table</button>
-            <div className="grid grid-cols-3 gap-3 mt-8 w-full max-w-xs text-center">
-              <div>
-                <p className="stat-mono text-paper font-semibold">4.7</p>
-                <p className="text-[11px] text-slate-500">Rating</p>
-              </div>
-              <div>
-                <p className="stat-mono text-paper font-semibold">1.2k+</p>
-                <p className="text-[11px] text-slate-500">Reviews</p>
-              </div>
-              <div>
-                <p className="stat-mono text-paper font-semibold">12yr</p>
-                <p className="text-[11px] text-slate-500">Serving Dhaka</p>
-              </div>
-            </div>
-          </div>
+      {/* Scrollable Tab Strip */}
+      <div className="overflow-x-auto">
+        <div className="flex items-center gap-1 bg-slate-100/50 p-1 rounded-xl w-max min-w-full">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+                  isActive ? 'text-accent shadow-sm' : 'text-slate-500 hover:text-ink hover:bg-white/50'
+                }`}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="cmsActiveTab"
+                    className="absolute inset-0 bg-white rounded-lg -z-10 shadow-sm"
+                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <Icon size={15} />
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
       </div>
+
+      {/* Tab Content */}
+      <div className="relative min-h-[500px]">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ x: 16, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -16, opacity: 0 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+          >
+            {activeTab === 'site-config'        && <SiteConfigPanel />}
+            {activeTab === 'ticker'             && <TickerItemsPanel />}
+            {activeTab === 'hero'               && <HeroPanel />}
+            {activeTab === 'story'              && <StoryPanel />}
+            {activeTab === 'featured-dishes'    && <FeaturedDishesPanel />}
+            {activeTab === 'features'           && <FeaturesPanel />}
+            {activeTab === 'gallery'            && <GalleryPanel />}
+            {activeTab === 'reviews'            && <ReviewsPanel />}
+            {activeTab === 'hours'              && <OpeningHoursPanel />}
+            {activeTab === 'location'           && <LocationPanel />}
+            {activeTab === 'faq'               && <FaqPanel />}
+            {activeTab === 'reservation-config' && <ReservationConfigPanel />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
-  )
+  );
 }

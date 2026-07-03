@@ -40,6 +40,7 @@ import InventoryCostReport from '../pages/reports/InventoryCostReport'
 import AnomalyAlerts from '../pages/reports/AnomalyAlerts'
 
 import MarketingLandingPage from '../pages/marketing/MarketingLandingPage'
+import LandingPage from '../pages/marketing/LandingPage'
 import Promotions from '../pages/marketing/Promotions'
 
 import GeneralSettings from '../pages/settings/GeneralSettings'
@@ -51,6 +52,7 @@ import RolesPermissions from '../pages/settings/RolesPermissions'
 export default function AppRoutes() {
   return (
     <Routes>
+      <Route path="/home" element={<LandingPage />} />
       <Route element={<DashboardLayout />}>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardOverview />} />

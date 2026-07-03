@@ -66,7 +66,23 @@ app.use('/api/v1/recipes', require('./routes/v1/recipe.routes'));
 app.use('/api/v1/suppliers', require('./routes/v1/supplier.routes'));
 app.use('/api/v1/purchase-orders', require('./routes/v1/purchaseOrder.routes'));
 app.use('/api/v1/reorder-suggestions', require('./routes/v1/reorder.routes'));
+app.use('/api/v1/reports', require('./routes/v1/reports.routes'));
 app.use('/api/webhooks', require('./routes/webhook.routes'));
+
+// CMS Routes
+app.use('/api/v1/cms/site-config', require('./routes/v1/cms.siteConfig.routes'));
+app.use('/api/v1/cms/ticker-items', require('./routes/v1/cms.tickerItems.routes'));
+app.use('/api/v1/cms/hero', require('./routes/v1/cms.hero.routes'));
+app.use('/api/v1/cms/story', require('./routes/v1/cms.story.routes'));
+app.use('/api/v1/cms/featured-dishes', require('./routes/v1/cms.featuredDishes.routes'));
+app.use('/api/v1/cms/features', require('./routes/v1/cms.features.routes'));
+app.use('/api/v1/cms/gallery-items', require('./routes/v1/cms.galleryItems.routes'));
+app.use('/api/v1/cms/reviews', require('./routes/v1/cms.reviews.routes'));
+app.use('/api/v1/cms/opening-hours', require('./routes/v1/cms.openingHours.routes'));
+app.use('/api/v1/cms/location', require('./routes/v1/cms.location.routes'));
+app.use('/api/v1/cms/faq-items', require('./routes/v1/cms.faqItems.routes'));
+app.use('/api/v1/cms/reservation-config', require('./routes/v1/cms.reservationConfig.routes'));
+
 
 
 // Global Error Handler
