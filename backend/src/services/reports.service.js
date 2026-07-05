@@ -563,6 +563,73 @@ class ReportsService {
             return;
         }
 
+        // Seed mock anomaly alerts in development mode if the table is empty
+        if (process.env.NODE_ENV === 'development') {
+            const { count: totalCount, error: countError } = await supabase
+                .from('anomaly_alerts')
+                .select('id', { count: 'exact', head: true });
+
+            if (!countError && totalCount === 0) {
+                console.log('[SUPABASE SEED] Seeding mock anomaly alerts in development mode...');
+                const mockAlerts = [
+                    {
+                        feature: 'revenue',
+                        type: 'revenue_drop',
+                        headline: 'Significant Sunday Revenue Drop Detected',
+                        body: "Today's revenue of $1,508.00 is 35.0% lower than the 4-week Sunday average of $2,320.00.",
+                        cta_label: 'View Sales Report',
+                        cta_href: '/reports/sales',
+                        confidence: 0.92,
+                        payload: {
+                            today_revenue: 1508.00,
+                            historical_average: 2320.00,
+                            deviation: -0.35,
+                            same_weekdays_history: [2500, 2100, 2400, 2280]
+                        },
+                        generated_at: new Date(Date.now() - 3600000).toISOString() // 1 hour ago
+                    },
+                    {
+                        feature: 'inventory',
+                        type: 'inventory',
+                        headline: 'High Ingredient Wastage Spike',
+                        body: 'Wastage of Beef Patty increased by 42.0% over the baseline average this week, costing an additional $180.00.',
+                        cta_label: 'View Inventory Cost',
+                        cta_href: '/reports/inventory-cost',
+                        confidence: 0.88,
+                        payload: {
+                            ingredient: 'Beef Patty',
+                            wastage_qty: 30,
+                            cost: 180.00
+                        },
+                        generated_at: new Date(Date.now() - 7200000).toISOString() // 2 hours ago
+                    },
+                    {
+                        feature: 'kitchen',
+                        type: 'kitchen',
+                        headline: 'Preparation Time Delay Alert',
+                        body: 'Average preparation time for Ribeye Steak surged to 32 minutes today (+40.0% compared to average). Check kitchen logs.',
+                        cta_label: 'View Menu Performance',
+                        cta_href: '/reports/menu-performance',
+                        confidence: 0.95,
+                        payload: {
+                            item: 'Ribeye Steak',
+                            avg_prep_time: 32,
+                            baseline_prep_time: 22.8
+                        },
+                        generated_at: new Date(Date.now() - 10800000).toISOString() // 3 hours ago
+                    }
+                ];
+                const { error: seedError } = await supabase
+                    .from('anomaly_alerts')
+                    .insert(mockAlerts);
+                if (seedError) {
+                    console.error('[SUPABASE SEED ERROR] Failed to seed mock alerts:', seedError.message);
+                } else {
+                    console.log('[SUPABASE SEED SUCCESS] Seeded 3 mock alerts.');
+                }
+            }
+        }
+
         // 1. Calculate today's paid bill totals
         const { data: bills, error: billError } = await supabase
             .from('bills')

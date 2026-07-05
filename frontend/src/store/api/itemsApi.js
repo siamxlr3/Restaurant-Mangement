@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { supabase } from '../../config/supabase'
 
 export const itemsApi = createApi({
   reducerPath: 'itemsApi',

@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUpdateAvailabilityMutation } from '../../store/api/itemsApi';
 import { toast } from 'sonner';
 
 const AvailabilityToggle = ({ id, isAvailable }) => {
   const [updateAvailability, { isLoading }] = useUpdateAvailabilityMutation();
   const [localChecked, setLocalChecked] = useState(isAvailable);
+
+  // Sync state if prop changes (e.g., from Supabase Realtime sync in parent)
+  useEffect(() => {
+    setLocalChecked(isAvailable);
+  }, [isAvailable]);
 
   const handleToggle = async (e) => {
     const newVal = e.target.checked;

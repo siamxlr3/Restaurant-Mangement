@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FiDownload, FiFileText, FiPackage, FiAlertTriangle, FiDollarSign, FiTrash2 } from 'react-icons/fi'
+import { FiDownload, FiFileText, FiAlertTriangle, FiDollarSign, FiTrash2 } from 'react-icons/fi'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Cell } from 'recharts'
 import PageHeader from '../../components/ui/PageHeader'
@@ -13,7 +13,6 @@ const COLUMNS = [
   { header: 'Unit', key: 'unit' },
   { header: 'Stock Qty', key: 'current_stock_qty', csv: (r) => parseFloat(r.current_stock_qty).toFixed(3) },
   { header: 'Cost/Unit', key: 'cost_per_unit', csv: (r) => `৳${parseFloat(r.cost_per_unit).toFixed(4)}` },
-  { header: 'Stock Value', key: 'current_stock_value', csv: (r) => `৳${parseFloat(r.current_stock_value).toFixed(2)}` },
   { header: 'Qty Purchased', key: 'qty_purchased', csv: (r) => parseFloat(r.qty_purchased).toFixed(3) },
   { header: 'Purchase Cost', key: 'purchase_cost', csv: (r) => `৳${parseFloat(r.purchase_cost).toFixed(2)}` },
   { header: 'Theoretical Use', key: 'qty_consumed_theoretical', csv: (r) => parseFloat(r.qty_consumed_theoretical).toFixed(3) },
@@ -47,7 +46,6 @@ export default function InventoryCostReport() {
   const rows = res?.data ?? []
   const meta = res?.meta
 
-  const totalStockValue = rows.reduce((s, r) => s + parseFloat(r.current_stock_value || 0), 0)
   const totalPurchaseCost = rows.reduce((s, r) => s + parseFloat(r.purchase_cost || 0), 0)
   const totalWastageValue = rows.reduce((s, r) => s + parseFloat(r.wastage_value || 0), 0)
   const highWastage = rows.filter((r) => parseFloat(r.wastage_value) > 100).length
@@ -82,8 +80,7 @@ export default function InventoryCostReport() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Stock Value" value={totalStockValue.toFixed(0)} prefix="৳" icon={FiPackage} />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <StatCard label="Purchase Cost" value={totalPurchaseCost.toFixed(0)} prefix="৳" icon={FiDollarSign} />
         <StatCard label="Total Wastage" value={totalWastageValue.toFixed(0)} prefix="৳" icon={FiTrash2} />
         <StatCard label="High Wastage Items" value={highWastage} icon={FiAlertTriangle} />
@@ -130,7 +127,6 @@ export default function InventoryCostReport() {
                       <th>Ingredient</th>
                       <th>Unit</th>
                       <th>Stock Qty</th>
-                      <th>Stock Value</th>
                       <th>Purchased</th>
                       <th>Purch. Cost</th>
                       <th>Theoretical</th>
@@ -149,7 +145,6 @@ export default function InventoryCostReport() {
                           <td className="font-medium text-ink">{r.ingredient_name}</td>
                           <td className="text-slate-400 text-xs">{r.unit}</td>
                           <td className="stat-mono">{parseFloat(r.current_stock_qty).toFixed(2)}</td>
-                          <td className="stat-mono font-semibold">৳{parseFloat(r.current_stock_value).toFixed(2)}</td>
                           <td className="stat-mono">{parseFloat(r.qty_purchased).toFixed(2)}</td>
                           <td className="stat-mono">৳{parseFloat(r.purchase_cost).toFixed(2)}</td>
                           <td className="stat-mono text-slate-500">{parseFloat(r.qty_consumed_theoretical).toFixed(2)}</td>

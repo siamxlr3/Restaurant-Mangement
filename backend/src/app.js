@@ -66,6 +66,7 @@ app.use('/api/v1/recipes', require('./routes/v1/recipe.routes'));
 app.use('/api/v1/suppliers', require('./routes/v1/supplier.routes'));
 app.use('/api/v1/purchase-orders', require('./routes/v1/purchaseOrder.routes'));
 app.use('/api/v1/reorder-suggestions', require('./routes/v1/reorder.routes'));
+app.use('/api/v1/demand-forecasts', require('./routes/v1/demandForecast.routes'));
 app.use('/api/v1/reports', require('./routes/v1/reports.routes'));
 app.use('/api/webhooks', require('./routes/webhook.routes'));
 
