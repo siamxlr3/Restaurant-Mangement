@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 const { sendResponse, sendError } = require('./utils/apiResponse');
 const performanceLogger = require('./middlewares/performanceLogger');
 const errorHandler = require('./middlewares/errorHandler');
+const { initMenuAIJobs } = require('./jobs/menuAI.job');
 
 const app = express();
 
@@ -67,6 +68,8 @@ app.use('/api/v1/suppliers', require('./routes/v1/supplier.routes'));
 app.use('/api/v1/purchase-orders', require('./routes/v1/purchaseOrder.routes'));
 app.use('/api/v1/reorder-suggestions', require('./routes/v1/reorder.routes'));
 app.use('/api/v1/demand-forecasts', require('./routes/v1/demandForecast.routes'));
+app.use('/api/v1/ai', require('./routes/v1/menuAI.routes'));
+app.use('/api/v1/ai/chat', require('./routes/v1/aiChat.routes'));
 app.use('/api/v1/reports', require('./routes/v1/reports.routes'));
 app.use('/api/webhooks', require('./routes/webhook.routes'));
 
@@ -85,6 +88,8 @@ app.use('/api/v1/cms/faq-items', require('./routes/v1/cms.faqItems.routes'));
 app.use('/api/v1/cms/reservation-config', require('./routes/v1/cms.reservationConfig.routes'));
 
 
+// Init scheduled jobs
+initMenuAIJobs();
 
 // Global Error Handler
 app.use(errorHandler);

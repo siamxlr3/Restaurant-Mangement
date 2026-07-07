@@ -31,6 +31,15 @@ const AI_PROVIDERS = [
     bg:    'bg-blue-50',
     field: { key: 'gemini_api_key', label: 'API Key', desc: 'Google AI Studio key', is_encrypted: true },
   },
+  {
+    id:    'anthropic',
+    name:  'Anthropic Claude',
+    desc:  'Claude 3.5 Haiku for menu performance AI analysis',
+    icon:  Cpu,
+    color: 'text-violet-500',
+    bg:    'bg-violet-50',
+    field: { key: 'anthropic_api_key', label: 'API Key', desc: 'Starts with sk-ant-…', is_encrypted: true },
+  },
 ]
 
 const AI_FEATURES = [
@@ -63,8 +72,8 @@ export default function AIConfiguration() {
   const { data, isLoading } = useGetSettingsByGroupQuery(GROUP)
   const [upsert] = useUpsertSettingsGroupMutation()
 
-  const [keys, setKeys]       = useState({ openai_api_key: '', gemini_api_key: '' })
-  const [saved, setSaved]     = useState({ openai_api_key: false, gemini_api_key: false })
+  const [keys, setKeys]       = useState({ openai_api_key: '', gemini_api_key: '', anthropic_api_key: '' })
+  const [saved, setSaved]     = useState({ openai_api_key: false, gemini_api_key: false, anthropic_api_key: false })
   const [masks, setMasks]     = useState({})
   const [features, setFeatures] = useState({})
   const [sensitivity, setSensitivity] = useState('2')
@@ -74,7 +83,7 @@ export default function AIConfiguration() {
     if (data?.data) {
       const map = data.data.reduce((a, s) => ({ ...a, [s.key]: s.value ?? '' }), {})
       const newSaved = {}; const newMasks = {}
-      ;['openai_api_key', 'gemini_api_key'].forEach((k) => {
+      ;['openai_api_key', 'gemini_api_key', 'anthropic_api_key'].forEach((k) => {
         newSaved[k]  = !!map[k]
         newMasks[k]  = map[k] || ''
       })
@@ -106,7 +115,7 @@ export default function AIConfiguration() {
       ;(res.data || []).forEach((s) => { newMasks[s.key] = s.value; newSaved[s.key] = true })
       setMasks((m) => ({ ...m, ...newMasks }))
       setSaved((s) => ({ ...s, ...newSaved }))
-      setKeys((k) => ({ ...k, openai_api_key: '', gemini_api_key: '' }))
+      setKeys((k) => ({ ...k, openai_api_key: '', gemini_api_key: '', anthropic_api_key: '' }))
       toast.success('AI configuration saved')
     } catch {
       toast.error('Failed to save AI configuration')

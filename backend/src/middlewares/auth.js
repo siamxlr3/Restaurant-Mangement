@@ -6,10 +6,11 @@ const { sendError } = require('../utils/apiResponse');
  */
 const auth = (req, res, next) => {
     const authHeader = req.headers.authorization;
+    const isDev = process.env.NODE_ENV === 'development';
     
     // Development bypass: provide a mock user if no token is provided in dev environment
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        if (process.env.NODE_ENV === 'development') {
+        if (isDev) {
             req.user = { id: 'dev-user-id', role: 'admin', email: 'dev@example.com' };
             return next();
         }
@@ -18,11 +19,21 @@ const auth = (req, res, next) => {
 
     const token = authHeader.split(' ')[1];
 
+    // Catch placeholder or invalid string tokens in development mode
+    if (isDev && (!token || token === 'null' || token === 'undefined' || token === 'dev-token')) {
+        req.user = { id: 'dev-user-id', role: 'admin', email: 'dev@example.com' };
+        return next();
+    }
+
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');
         req.user = decoded;
         next();
     } catch (error) {
+        if (isDev) {
+            req.user = { id: 'dev-user-id', role: 'admin', email: 'dev@example.com' };
+            return next();
+        }
         return sendError(res, 401, 'Unauthorized: Invalid token');
     }
 };

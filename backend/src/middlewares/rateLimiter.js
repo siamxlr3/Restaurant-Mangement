@@ -43,4 +43,6 @@ module.exports = {
     billingWriteLimiter: writeLimiter,
     cmsReadLimiter: readLimiter,
     cmsWriteLimiter: writeLimiter,
+    menuAIReadLimiter: readLimiter,
+    menuAIWriteLimiter: writeLimiter,
 };

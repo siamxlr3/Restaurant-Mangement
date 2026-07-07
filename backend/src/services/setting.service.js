@@ -92,6 +92,7 @@ class SettingService {
             paypal:     () => this._testPayPal(key),
             openai:     () => this._testOpenAI(key),
             gemini:     () => this._testGemini(key),
+            anthropic:  () => this._testAnthropic(key),
             sendgrid:   () => this._testSendGrid(key),
             twilio:     () => this._testTwilio(key),
         };
@@ -212,6 +213,33 @@ class SettingService {
                     res.statusCode === 200
                         ? { success: true,  message: 'Gemini connection successful' }
                         : { success: false, message: `Gemini returned HTTP ${res.statusCode}` }
+                );
+            });
+            req.on('error', (e) => resolve({ success: false, message: e.message }));
+            req.on('timeout', ()  => resolve({ success: false, message: 'Request timed out' }));
+            req.end();
+        });
+    }
+
+    async _testAnthropic(key) {
+        const https = require('https');
+        return new Promise((resolve) => {
+            const options = {
+                hostname: 'api.anthropic.com',
+                path: '/v1/models',
+                method: 'GET',
+                headers: {
+                    'x-api-key':         key,
+                    'anthropic-version': '2023-06-01',
+                    'User-Agent':        'RestaurantMS/1.0',
+                },
+                timeout: 8000,
+            };
+            const req = https.request(options, (res) => {
+                resolve(
+                    res.statusCode === 200
+                        ? { success: true,  message: 'Anthropic connection successful' }
+                        : { success: false, message: `Anthropic returned HTTP ${res.statusCode}` }
                 );
             });
             req.on('error', (e) => resolve({ success: false, message: e.message }));

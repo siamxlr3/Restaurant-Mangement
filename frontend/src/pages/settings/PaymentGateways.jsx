@@ -203,7 +203,7 @@ function GatewayCard({ gateway, initialValues, savedMasks }) {
               ))}
 
               <div className="pt-3 border-t border-slate-100">
-                <SettingsSaveButton isLoading={submitting} />
+                <SettingsSaveButton isLoading={submitting} onClick={handleSave} />
               </div>
             </div>
           </motion.div>

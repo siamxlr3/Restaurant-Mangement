@@ -26,6 +26,8 @@ import { purchaseOrdersApi } from './api/purchaseOrdersApi'
 import { cmsApi } from './api/cmsApi'
 import { reportsApi } from './api/reportsApi'
 import { demandForecastApi } from './api/demandForecastApi'
+import { menuAIApi } from './api/menuAIApi'
+import { aiChatApi } from './api/aiChatApi'
 
 
 export const store = configureStore({
@@ -57,6 +59,8 @@ export const store = configureStore({
     [cmsApi.reducerPath]: cmsApi.reducer,
     [reportsApi.reducerPath]: reportsApi.reducer,
     [demandForecastApi.reducerPath]: demandForecastApi.reducer,
+    [menuAIApi.reducerPath]: menuAIApi.reducer,
+    [aiChatApi.reducerPath]: aiChatApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -86,5 +90,7 @@ export const store = configureStore({
       cmsApi.middleware,
       reportsApi.middleware,
       demandForecastApi.middleware,
+      menuAIApi.middleware,
+      aiChatApi.middleware,
     ),
 })
