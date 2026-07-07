@@ -5,10 +5,8 @@ import {
   Receipt,
   Boxes,
   Users,
-  Heart,
   Sparkles,
   BarChart3,
-  Megaphone,
   Settings as SettingsIcon,
 } from 'lucide-react'
 
@@ -50,8 +48,6 @@ export const navSections = [
     path: '/billing/bills',
     children: [
       { label: 'Bills', path: '/billing/bills' },
-      { label: 'Discounts', path: '/billing/discounts' },
-      { label: 'Tax settings', path: '/billing/tax-settings' },
     ],
   },
   {
@@ -77,17 +73,7 @@ export const navSections = [
       { label: 'Attendance', path: '/staff/attendance' },
     ],
   },
-  {
-    id: 'customers',
-    label: 'Customers',
-    icon: Heart,
-    path: '/customers/directory',
-    children: [
-      { label: 'Customers', path: '/customers/directory' },
-      { label: 'Loyalty', path: '/customers/loyalty' },
-      { label: 'Feedback', path: '/customers/feedback', badge: 'AI' },
-    ],
-  },
+
   {
     id: 'ai-insights',
     label: 'AI insights',
@@ -107,7 +93,6 @@ export const navSections = [
     children: [
       { label: 'Sales', path: '/reports/sales' },
       { label: 'Menu performance', path: '/reports/menu-performance' },
-      { label: 'Staff performance', path: '/reports/staff-performance' },
       { label: 'Inventory cost', path: '/reports/inventory-cost' },
       { label: 'Anomaly alerts', path: '/reports/anomaly-alerts' },
     ],
@@ -115,11 +100,10 @@ export const navSections = [
   {
     id: 'marketing',
     label: 'Marketing',
-    icon: Megaphone,
+    icon: BarChart3,
     path: '/marketing/landing-page',
     children: [
       { label: 'Landing page', path: '/marketing/landing-page' },
-      { label: 'Promotions', path: '/marketing/promotions' },
     ],
   },
   {
@@ -132,7 +116,6 @@ export const navSections = [
       { label: 'Payment gateways', path: '/settings/payment-gateways' },
       { label: 'AI configuration', path: '/settings/ai-configuration' },
       { label: 'Notifications', path: '/settings/notifications' },
-      { label: 'Roles & permissions', path: '/settings/roles-permissions' },
     ],
   },
 ]
